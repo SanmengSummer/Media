@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +18,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.landmark.mediasessionlib.model.db.DaoManager;
-import com.landmark.mediasessionlib.model.db.data.MediaDataHelper;
-import com.landmark.mediasessionlib.utils.LogUtils;
-import com.landmark.mediasessionlib.controller.MediaPlayerManager;
-import com.landmark.mediasessionlib.utils.MediaIdUtils;
+import com.landmark.mediasessionlib.controller.MediaImpl.MediaPlayerManager;
+import com.landmark.mediasessionlib.controller.utils.LogUtils;
+import com.landmark.mediasessionlib.controller.utils.MediaIdUtils;
 
 import static com.landmark.mediasessionlib.controller.MediaConfig.*;
 
@@ -33,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayerManager instance;
     private SeekBar mSeek;
     private RecyclerView mPlayerListView;
-    private TextView textTitle, textDetail;
+    private TextView textTitle;
+    private Button btnPlayMode;
     private ArrayList<MediaBrowserCompat.MediaItem> mediaItemList;
 
     @Override
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textTitle = findViewById(R.id.text_title);
-        textDetail = findViewById(R.id.tv_detail);
         mPlayerListView = findViewById(R.id.rv_player_list);
+        btnPlayMode = findViewById(R.id.play_mode);
 
         mSeek = findViewById(R.id.seek);
         mSeek.setOnSeekBarChangeListener(onSeekBarChangeListener);
@@ -52,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         instance.getNativeMediaList(list -> {
             mediaItemList = (ArrayList<MediaBrowserCompat.MediaItem>) list;
+
             mPlayerListView.setAdapter(new RecyclerViewAdapter(this, mediaItemList));
+
         });
 
     }
@@ -103,26 +105,41 @@ public class MainActivity extends AppCompatActivity {
         instance.getTransportControls().stop();
     }
 
+    private static int playMode = 0;
+
     public void play_mode(View v) {
-        Button view = (Button) v;
-        if (view.getText() == "顺序播放") {
-            instance.setPlayerMode(MediaPlayerManager.random, false);
-            view.setText("随机播放");
-        } else if (view.getText() == "随机播放") {
-            instance.setPlayerMode(MediaPlayerManager.single, false);
-            view.setText("单曲播放");
-        } else if (view.getText() == "单曲播放") {
-            instance.setPlayerMode(MediaPlayerManager.order, true);
-            view.setText("顺序循环");
-        } else if (view.getText() == "顺序循环") {
-            instance.setPlayerMode(MediaPlayerManager.random, true);
-            view.setText("随机循环");
-        } else if (view.getText() == "随机循环") {
-            instance.setPlayerMode(MediaPlayerManager.single, true);
-            view.setText("单曲循环");
-        } else {
-            instance.setPlayerMode(MediaPlayerManager.order, false);
-            view.setText("顺序播放");
+        playMode++;
+        setPlayMode((Button) v);
+    }
+
+    private void setPlayMode(Button view) {
+        switch (playMode) {
+            case 1:
+                view.setText("随机播放");
+                instance.setPlayerMode(MediaPlayerManager.random, false);
+                break;
+            case 2:
+                view.setText("单曲播放");
+                instance.setPlayerMode(MediaPlayerManager.single, false);
+                break;
+            case 3:
+                view.setText("顺序循环");
+                instance.setPlayerMode(MediaPlayerManager.order, true);
+                break;
+            case 4:
+                view.setText("随机循环");
+                instance.setPlayerMode(MediaPlayerManager.random, true);
+                break;
+            case 5:
+                view.setText("单曲循环");
+                instance.setPlayerMode(MediaPlayerManager.single, true);
+                break;
+            case 6:
+            case 0:
+                playMode = 0;
+                view.setText("顺序播放");
+                instance.setPlayerMode(MediaPlayerManager.order, false);
+                break;
         }
     }
 
@@ -141,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         instance.connect();
+        setPlayMode(btnPlayMode);
     }
 
     @Override

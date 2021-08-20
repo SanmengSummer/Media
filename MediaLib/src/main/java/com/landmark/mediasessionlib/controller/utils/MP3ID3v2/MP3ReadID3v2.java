@@ -1,4 +1,4 @@
-package com.landmark.mediasessionlib.utils.MP3ID3v2;
+package com.landmark.mediasessionlib.controller.utils.MP3ID3v2;
 
 import java.io.File;
 import java.io.FileInputStream;

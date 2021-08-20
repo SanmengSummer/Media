@@ -1,4 +1,4 @@
-package com.landmark.mediasessionlib.controller;
+package com.landmark.mediasessionlib.controller.MediaImpl;
 
 import android.media.MediaPlayer;
 

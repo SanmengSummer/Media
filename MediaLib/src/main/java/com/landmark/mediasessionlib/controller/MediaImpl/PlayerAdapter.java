@@ -1,4 +1,4 @@
-package com.landmark.mediasessionlib.controller;
+package com.landmark.mediasessionlib.controller.MediaImpl;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.media.PlaybackParams;
 import android.net.Uri;
 import android.view.Surface;
 
-import com.landmark.mediasessionlib.utils.LogUtils;
+import com.landmark.mediasessionlib.controller.utils.LogUtils;
 
 import java.io.IOException;
 

@@ -7,27 +7,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 
 import com.landmark.mediasessionlib.R;
 import com.landmark.mediasessionlib.controller.bean.MediaInfoBean;
-import com.landmark.mediasessionlib.model.common.Constants;
 import com.landmark.mediasessionlib.model.db.data.MediaDataHelper;
-import com.landmark.mediasessionlib.model.db.data.MediaIDHelper;
-import com.landmark.mediasessionlib.model.db.data.MusicProvider;
 import com.landmark.mediasessionlib.model.model.MediaData;
 import com.landmark.mediasessionlib.model.model.MediaDataModel;
-import com.landmark.mediasessionlib.utils.LogUtils;
-import com.landmark.mediasessionlib.utils.MP3ID3v2.MP3ReadID3v2;
-import com.landmark.mediasessionlib.utils.UriToPathUtil;
+import com.landmark.mediasessionlib.controller.utils.LogUtils;
+import com.landmark.mediasessionlib.controller.utils.MP3ID3v2.MP3ReadID3v2;
+import com.landmark.mediasessionlib.controller.utils.UriToPathUtil;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Utility class to help on queue related tasks.
@@ -38,26 +35,22 @@ public class QueueManager {
 
     private static MediaData musicDataList;
     private static ArrayList<MediaBrowserCompat.MediaItem> mediaItems;
+    private static ArrayList<MediaBrowserCompat.MediaItem> mCurrentMediaItems = new ArrayList<>();
 
     public static ArrayList<MediaBrowserCompat.MediaItem> getCurrentList(Context mContext, int page, int size, String type) {
         mediaItems = new ArrayList<>();
         musicDataList = MediaDataHelper.getInstance(mContext).getMusicDataList(page, size, type);
         List<MediaDataModel> data = musicDataList.getData();
         for (int i = 0; i < data.size(); i++) {
-            Uri uri = Uri.fromFile(
-                    new File(Constants.DATA_DIR
-//                                    + "/emulated/0/storage"
-//                                    + "/playres/movie/" + i + ".mp4"));
-                                    + "/playres/music/" + i + ".mp3"));
-
             MediaDataModel mediaDataModel = data.get(i);
             String path = mediaDataModel.getPath();
-            String albumName = mediaDataModel.getAlbumVo() == null ? "" : mediaDataModel.getAlbumVo().getName();
+            Uri uri = UriToPathUtil.getUri(path);
+            MediaInfoBean mediaInfo = getMediaInfo(mContext, uri);
+            String albumName = mediaDataModel.getAlbumVo() == null ? mediaInfo.getMediaAlbum() : mediaDataModel.getAlbumVo().getName();
             String genreName = mediaDataModel.getGenreVo() == null ? "" : mediaDataModel.getGenreVo().getName();
-            String singerName = mediaDataModel.getSingerVo() == null ? "" : mediaDataModel.getSingerVo().getName();
+            String singerName = mediaDataModel.getSingerVo() == null ? mediaInfo.getMediaArtist() : mediaDataModel.getSingerVo().getName();
             String name = mediaDataModel.getName();
 
-            MediaInfoBean mediaInfo = getMediaInfo(mContext, uri);
             MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
                     .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, UriToPathUtil.getRealFilePath(mContext, uri))
                     .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, name)
@@ -75,31 +68,29 @@ public class QueueManager {
         return mediaItems;
     }
 
-    public  static ArrayList<MediaBrowserCompat.MediaItem> getRandomPlayList(Context mContext, String type) {
-        ArrayList<MediaBrowserCompat.MediaItem> playMediaItems;
-        if (musicDataList == null || mediaItems == null)
-            playMediaItems = getCurrentList(mContext, 0, 10, type);
-        else playMediaItems = mediaItems;
-        Collections.shuffle(playMediaItems);
-        return playMediaItems;
+    public static ArrayList<MediaBrowserCompat.MediaItem> getRandomPlayList(Context mContext, String type) {
+        if (musicDataList == null || mediaItems == null || mediaItems.isEmpty())
+            mediaItems = getCurrentList(mContext, 0, 10, type);
+        mCurrentMediaItems = new ArrayList<>(mediaItems);
+        Collections.shuffle(mCurrentMediaItems);
+        return mCurrentMediaItems;
     }
 
     public static ArrayList<MediaBrowserCompat.MediaItem> getSinglePlayList(Context mContext, int currentIndex, String type) {
-        ArrayList<MediaBrowserCompat.MediaItem> playMediaItems;
-        if (musicDataList == null || mediaItems == null)
-            playMediaItems = getCurrentList(mContext, 0, 10, type);
-        else playMediaItems = mediaItems;
-        playMediaItems.clear();
-        playMediaItems.add(playMediaItems.get(currentIndex));
-        return playMediaItems;
+        if (musicDataList == null || mediaItems == null || mediaItems.isEmpty())
+            mediaItems = getCurrentList(mContext, 0, 10, type);
+        MediaBrowserCompat.MediaItem mediaItem = mCurrentMediaItems.get(currentIndex);
+        mCurrentMediaItems.clear();
+        mCurrentMediaItems.add(mediaItem);
+        return mCurrentMediaItems;
     }
 
     public static ArrayList<MediaBrowserCompat.MediaItem> getOrderPlayList(Context mContext, String type) {
-        ArrayList<MediaBrowserCompat.MediaItem> playMediaItems;
-        if (musicDataList == null || mediaItems == null)
-            playMediaItems = getCurrentList(mContext, 0, 10, type);
-        else playMediaItems = mediaItems;
-        return playMediaItems;
+        if (musicDataList == null || mediaItems == null || mediaItems.isEmpty())
+            mediaItems = getCurrentList(mContext, 0, 10, type);
+        mCurrentMediaItems.clear();
+        mCurrentMediaItems.addAll(mediaItems);
+        return mCurrentMediaItems;
     }
 
     private static MediaInfoBean getMediaInfo(Context mContext, Uri mediaUri) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.landmark.mediasessionlib.utils;
+package com.landmark.mediasessionlib.controller.utils;
 
 import android.app.Activity;
 import android.support.v4.media.MediaBrowserCompat;

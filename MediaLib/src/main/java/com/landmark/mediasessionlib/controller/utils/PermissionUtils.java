@@ -1,4 +1,4 @@
-package com.landmark.mediasessionlib.utils;
+package com.landmark.mediasessionlib.controller.utils;
 
 import android.app.Activity;
 import android.content.Context;

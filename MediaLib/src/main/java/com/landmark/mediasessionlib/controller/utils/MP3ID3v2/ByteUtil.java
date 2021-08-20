@@ -1,6 +1,6 @@
-package com.landmark.mediasessionlib.utils.MP3ID3v2;
+package com.landmark.mediasessionlib.controller.utils.MP3ID3v2;
 
-import com.landmark.mediasessionlib.utils.LogUtils;
+import com.landmark.mediasessionlib.controller.utils.LogUtils;
 
 /**
  * Use byte Util class
@@ -124,11 +124,8 @@ public class ByteUtil {
      */
     public static byte[] cutBytes(int start, int end, byte[] src) {
         if (end <= start || start < 0 || end > src.length) {
-            LogUtils.error("start:"+start);
-            LogUtils.error("end:"+end);
-            LogUtils.error("src:"+src.length);
             try {
-                throw new Exception("参数错误");
+                LogUtils.debug("" + new Exception("参数错误"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

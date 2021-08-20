@@ -1,4 +1,4 @@
-package com.landmark.mediasessionlib.controller;
+package com.landmark.mediasessionlib.controller.MediaImpl;
 
 import static com.landmark.mediasessionlib.controller.MediaConfig.*;
 
@@ -22,12 +22,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
+import com.landmark.mediasessionlib.controller.MediaService;
 import com.landmark.mediasessionlib.controller.bean.LastModeBean;
-import com.landmark.mediasessionlib.utils.LogUtils;
-import com.landmark.mediasessionlib.utils.LrcProcess;
-import com.landmark.mediasessionlib.utils.SPUtils;
+import com.landmark.mediasessionlib.controller.utils.LogUtils;
+import com.landmark.mediasessionlib.controller.utils.LrcProcess;
+import com.landmark.mediasessionlib.controller.utils.SPUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,7 +53,7 @@ public class MediaPlayerManager {
     private long mCurrentPosition;
     private int mCurrentIndex = 0;
     private int mMode = order;
-    private boolean isLoop = true;
+    private boolean isLoop = false;
 
     public synchronized static MediaPlayerManager getInstance() {
         if (null == mInstance) {
@@ -135,13 +135,10 @@ public class MediaPlayerManager {
     public void setPlayerMode(int mode, boolean isLoop) {
         this.mMode = mode;
         this.isLoop = isLoop;
+        if (getTransportControls() == null) return;
         setPlayerMediaItemList(mode);
         getTransportControls().setRepeatMode(isLoop ? PlaybackStateCompat.REPEAT_MODE_ALL :
                 PlaybackStateCompat.REPEAT_MODE_NONE);
-    }
-
-    private List<MediaBrowserCompat.MediaItem> getCurrentPlayList() {
-        return mPlayMediaItemList == null ? mMediaItemList : mPlayMediaItemList;
     }
 
     private void setPlayerMediaItemList(int mode) {

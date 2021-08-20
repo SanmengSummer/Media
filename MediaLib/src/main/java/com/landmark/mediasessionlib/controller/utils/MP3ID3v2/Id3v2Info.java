@@ -1,4 +1,4 @@
-package com.landmark.mediasessionlib.utils.MP3ID3v2;
+package com.landmark.mediasessionlib.controller.utils.MP3ID3v2;
 
 
 public class Id3v2Info {

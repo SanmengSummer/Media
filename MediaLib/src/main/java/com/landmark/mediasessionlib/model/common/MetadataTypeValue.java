@@ -12,7 +12,7 @@ package com.landmark.mediasessionlib.model.common;
  * V0.xx  2021/8/10 16  chenqiang   1) …
  ***********************************************/
 public enum MetadataTypeValue {
-    TYPE_ARTIST("TYPE_ARTIST"),//singer
+    TYPE_ARTIST("TYPE_ARTIST"),
     TYPE_ALBUM("TYPE_ALBUM"),
     TYPE_GENRE("TYPE_GENRE"),
     TYPE_FOLDER("TYPE_FOLDER"),

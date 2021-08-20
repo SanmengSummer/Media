@@ -1,4 +1,4 @@
-package com.landmark.mediasessionlib.utils;
+package com.landmark.mediasessionlib.controller.utils;
 
 import android.Manifest;
 import android.Manifest.permission;

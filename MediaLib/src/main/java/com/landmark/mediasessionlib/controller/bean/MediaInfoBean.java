@@ -17,10 +17,19 @@ public class MediaInfoBean {
     private String MediaPath;
     private String MediaSize;
     private String MediaDuration;
+    private String MediaGenre;
     private String MediaClass;
     private String MediaYear;
     private boolean isCollect;
     private Bitmap MediaIconBitmap;
+
+    public String getMediaGenre() {
+        return MediaGenre;
+    }
+
+    public void setMediaGenre(String mediaGenre) {
+        MediaGenre = mediaGenre;
+    }
 
     public String getMediaId() {
         return MediaId;

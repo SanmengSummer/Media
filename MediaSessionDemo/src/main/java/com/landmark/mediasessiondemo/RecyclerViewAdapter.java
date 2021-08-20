@@ -2,10 +2,9 @@ package com.landmark.mediasessiondemo;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaDescriptionCompat;
-import android.support.v4.media.MediaMetadataCompat;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.landmark.mediasessionlib.utils.LogUtils;
 
 import java.util.ArrayList;
 
@@ -55,7 +52,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         MediaDescriptionCompat description = mediaItem.getDescription();
         Bitmap iconBitmap = description.getIconBitmap();
         holder.setImageResource(R.id.image, iconBitmap);
-
         holder.setText(R.id.textView,
                 "Title: " + mediaItem.getDescription().getTitle()
                         + "\n Artist: " + mediaItem.getDescription().getSubtitle()

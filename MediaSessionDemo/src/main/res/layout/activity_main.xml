@@ -1,51 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_play"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="start"
-            android:text="开始播放" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_play_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="play_pause"
-            android:text="播放/暂停" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="stop"
-            android:text="停止播放" />
+                <Button
+                    android:id="@+id/btn_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="start"
+                    android:text="开始播放" />
+
+                <Button
+                    android:id="@+id/btn_play_pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="play_pause"
+                    android:text="播放/暂停" />
+
+                <Button
+                    android:id="@+id/btn_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="stop"
+                    android:text="停止播放" />
+
+                <Button
+                    android:id="@+id/play_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="play_mode"
+                    android:text="顺序播放" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_fast_forward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="fastForward"
+                    android:text="快进" />
+
+                <Button
+                    android:id="@+id/btn_rewind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="rewind"
+                    android:text="后退" />
+
+                <Button
+                    android:id="@+id/btn_skip_Previous"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="skipPrevious"
+                    android:text="上一首" />
+
+                <Button
+                    android:id="@+id/btn_skip_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="skipNext"
+                    android:text="下一首" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="400dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center">
+
+                <SurfaceView
+                    android:id="@+id/surfaceView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+                <TextView
+                    android:id="@+id/text_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/white" />
+
+                <ImageView
+                    android:id="@+id/iv_GG"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+            <SeekBar
+                android:id="@+id/seek"
+                android:layout_width="420dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_player_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </LinearLayout>
     </LinearLayout>
-
-    <SeekBar
-        android:id="@+id/seek"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/text_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <SurfaceView
-        android:id="@+id/surfaceView"
-        android:layout_width="512dp"
-        android:layout_height="384dp"
-        android:layout_gravity="center" />
-</LinearLayout>
+</ScrollView>
